@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<title>Stamp Collection - Collection</title>
+		<link rel="stylesheet" href="styles.css">
+		<link rel="icon" type="image/png" href="images/pngegg.png">
+		<script src="data.js"></script>
+		<script src="script.js"></script>
+	</head>
+	<body>
+		<nav class="navbar">
+			<ul>
+				<li><a href="index.html">Home</a></li>
+				<li><a href="collection.html" class="active">Collection</a></li>
+				<li><a href="add.html">Add Stamp</a></li>
+			</ul>
+		</nav>
+		
+		<main class="container">
+			<h1>Stamp Collection</h1>
+			
+			<div class="controls">
+				<div class="sort-controls">
+					<button id="reset-sort-btn">Reset Sorting</button>
+					<button class="sort-btn" data-field="name" data-label="Name">Name</button>
+					<button class="sort-btn" data-field="year" data-label="Year">Year</button>
+					<button class="sort-btn" data-field="condition" data-label="Condition">Condition</button>
+				</div>
+				
+				<div class="filter-controls">
+					<select id="category-filter" onchange="filterByCategory(this.value)">
+						<option value="all">All Categories</option>
+						<option value="Commemorative">Commemorative</option>
+						<option value="Definitive">Definitive</option>
+						<option value="Seasonal">Seasonal</option>
+						<option value="Sports">Sports</option>
+						<option value="Nature">Nature</option>
+						<option value="Historical">Historical</option>
+						<option value="Transport">Transport</option>
+						<option value="Science">Science</option>
+					</select>
+				</div>
+				
+				<div class="items-per-page">
+					<label for="items-per-page">Items per page:</label>
+					<select id="items-per-page" onchange="updateItemsPerPage(this.value)">
+						<option value="6">6</option>
+						<option value="12">12</option>
+						<option value="18">18</option>
+						<option value="24">24</option>
+					</select>
+				</div>
+				
+				<div class="search-bar">
+					<input 
+					type="text" 
+					id="search-input" 
+					placeholder="Search stamps..." 
+					oninput="searchCollection()"
+					>
+				</div>
+				
+				
+			</div>
+			
+			<div id="collection-container" class="collection-grid"></div> <!-- Allows dynamic updates without reloading the page -->
+			
+			<div class="pagination">
+				<button id="prev-btn">Previous</button>
+				<span id="current-page"></span>
+				<button id="next-btn">Next</button>
+			</div>
+		</main>
+		
+		<footer>
+			<p>&copy; 2025 Stamp Collection</p>
+		</footer>
+	</body>
+</html>

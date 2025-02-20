@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<title>Stamp Collection - Add New</title>
+		<link rel="stylesheet" href="styles.css">
+		<link rel="icon" type="image/png" href="images/pngegg.png">
+		<script src="data.js"></script>
+		<script src="script.js"></script>
+	</head>
+	<body>
+		<nav class="navbar">
+			<ul>
+				<li><a href="index.html">Home</a></li>
+				<li><a href="collection.html">Collection</a></li>
+				<li><a href="add.html" class="active">Add Stamp</a></li>
+			</ul>
+		</nav>
+		
+		<main class="container">
+			<h1>Add New Stamp</h1>
+			
+			<form id="add-stamp-form" class="add-form">
+				<div class="form-group">
+					<label for="name">Name:</label>
+					<input type="text" id="name" name="name" required>
+				</div>
+				
+				<div class="form-group">
+					<label for="year">Year:</label>
+					<input type="number" id="year" name="year" min="1800" max="2025" required>
+				</div>
+				
+				<div class="form-group">
+					<label for="category">Category:</label>
+					<select id="category" name="category" required>
+						<option value="">Select a category</option>
+						<option value="Commemorative">Commemorative</option>
+						<option value="Definitive">Definitive</option>
+						<option value="Seasonal">Seasonal</option>
+						<option value="Sports">Sports</option>
+						<option value="Nature">Nature</option>
+						<option value="Historical">Historical</option>
+						<option value="Transport">Transport</option>
+						<option value="Science">Science</option>
+					</select>
+				</div>
+				
+				<div class="form-group">
+					<label for="condition">Condition:</label>
+					<select id="condition" name="condition" required>
+						<option value="">Select condition</option>
+						<option value="Mint">Mint</option>
+						<option value="Excellent">Excellent</option>
+						<option value="Good">Good</option>
+						<option value="Fair">Fair</option>
+						<option value="Used">Used</option>
+					</select>
+				</div>
+				
+				<button type="submit" class="btn">Add Stamp</button>
+			</form>
+		</main>
+		
+		<footer>
+			<p>&copy; 2025 Stamp Collection</p>
+		</footer>
+	</body>
+</html>								
