@@ -271,7 +271,7 @@ select {
 	float: right;
 	width: 250px;
 	margin: 10px 0 10px 15px;
-	border-radius: 10px
+	border-radius: 10px;
 	box-shadow: 3px 3px 8px rgba(0, 0, 0, 0.2);
 }
 
@@ -285,7 +285,7 @@ figure {
 figcaption {
 	display: block;
 	font-size: 14px;
-	font-color: #555;
+	color: #555;
 	margin-top: 5px;
 }
 
