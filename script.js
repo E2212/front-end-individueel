@@ -13,7 +13,7 @@ let isFirstLoad = true;
 
 // Update page title to include current page number
 function updatePageTitle() {
-    document.title = `Stamp Collection - Page ${currentPage}`;
+    document.title = `My Stamp Collection - Page ${currentPage}`;
 }
 
 // Sort function
@@ -25,11 +25,11 @@ function sortCollection(field) {
 	
 	// Define custom order for Condition sorting
     const conditionOrder = {
-        "Mint": 1,
-        "Excellent": 2,
+        "Mint": 5,
+        "Excellent": 4,
         "Good": 3,
-        "Fair": 4,
-        "Used": 5
+        "Fair": 2,
+        "Used": 1
 	};
 	
     collection.sort((a, b) => {
@@ -109,10 +109,6 @@ function displayCollection() {
 			<p>Year: ${stamp.year}</p>
 			<p>Category: ${stamp.category}</p>
 			<p>Condition: ${stamp.condition}</p>
-			</div>
-			div class="card-back">
-			<h3>Backstory</h3>
-			<p>${stamp.backstory || "No backstory available for this stamp."}</p>
 			</div>
             `;
             container.appendChild(card);
