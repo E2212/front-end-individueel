@@ -110,10 +110,6 @@ function displayCollection() {
 			<p>Category: ${stamp.category}</p>
 			<p>Condition: ${stamp.condition}</p>
 			</div>
-			div class="card-back">
-			<h3>Backstory</h3>
-			<p>${stamp.backstory || "No backstory available for this stamp."}</p>
-			</div>
             `;
             container.appendChild(card);
 		});
