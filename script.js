@@ -1,14 +1,9 @@
-let storedItemsPerPage = localStorage.getItem('itemsPerPage');
-let ITEMS_PER_PAGE = storedItemsPerPage ? parseInt(storedItemsPerPage) : 6; // Default value
-console.log("ITEMS_PER_PAGE is set to:", ITEMS_PER_PAGE); // Debugging log
-
-let storedPage = localStorage.getItem('currentPage'); // Load saved page number
-let currentPage = storedPage ? parseInt(storedPage) : 1; // Default to 1 if nothing is saved
-
+let itemsPerPage = localStorage.getItem('itemsPerPage') ? parseInt(localStorage.getItem('itemsPerPage')) : 6;
+let currentPage = localStorage.getItem('currentPage') ? parseInt(localStorage.getItem('currentPage')) : 1;
 let currentSort = { field: 'name', ascending: true };
 let currentCategory = 'all';
-let collection = getStamps();
-let isFirstLoad = true; 
+let searchTerm = "";
+let collection = [];
 
 
 // Update page title to include current page number
@@ -88,8 +83,8 @@ function displayCollection() {
     const container = document.getElementById('collection-container');
     if (!container) return;
 	
-	const start = (currentPage - 1) * ITEMS_PER_PAGE;
-    const end = start + ITEMS_PER_PAGE;
+	const start = (currentPage - 1) * itemsPerPage;
+    const end = start + itemsPerPage;
     const paginatedItems = collection.slice(start, end);
 	
     container.innerHTML = ''; // Clear existing stamps
@@ -146,8 +141,8 @@ function searchCollection() {
 
 
 function updateItemsPerPage(value) {
-    ITEMS_PER_PAGE = parseInt(value);
-    localStorage.setItem('itemsPerPage', ITEMS_PER_PAGE); // Save setting
+    itemsPerPage = parseInt(value);
+    localStorage.setItem('itemsPerPage', itemsPerPage); // Save setting
     currentPage = 1; // Reset to first page
 	localStorage.setItem('currentPage', currentPage); // Save reset page number
     displayCollection(); // Update UI instantly
@@ -156,7 +151,7 @@ function updateItemsPerPage(value) {
 
 // Update pagination controls
 function updatePagination() {
-    const totalPages = Math.ceil(collection.length / ITEMS_PER_PAGE);
+    const totalPages = Math.ceil(collection.length / itemsPerPage);
     
     // Get button elements
     const prevBtn = document.getElementById('prev-btn');
@@ -244,7 +239,7 @@ document.addEventListener("DOMContentLoaded", () => {
     
     const itemsPerPageDropdown = document.getElementById("items-per-page");
     if (itemsPerPageDropdown) {
-        itemsPerPageDropdown.value = ITEMS_PER_PAGE;
+        itemsPerPageDropdown.value = itemsPerPage;
 	}
 	
     displayCollection(); 
@@ -266,7 +261,7 @@ document.addEventListener("DOMContentLoaded", () => {
 	});
 	
 	document.getElementById('next-btn')?.addEventListener('click', () => {
-		if (currentPage < Math.ceil(collection.length / ITEMS_PER_PAGE)) {
+		if (currentPage < Math.ceil(collection.length / itemsPerPage)) {
 			currentPage++;
 			localStorage.setItem('currentPage', currentPage); // Save page number
 			displayCollection();
