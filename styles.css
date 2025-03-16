@@ -87,8 +87,7 @@ h1 {
 	flex-wrap: wrap;
 }
 
-button,
-.btn {
+button {
     padding: 0.2rem 0.4rem;
     border: none;
     border-radius: 8px;
@@ -99,14 +98,12 @@ button,
     transition: background-color 0.3s, transform 0.2s;
 }
 
-button:hover:not(:disabled),
-.btn:hover {
+button:hover:not(:disabled) {
     background-color: #0056b3;
     transform: scale(1.05) translateY(-2px); 
 }
 
-button:active,
-.btn:active {
+button:active {
     transform: scale(0.95); 
 }
 
@@ -141,16 +138,19 @@ select {
 }
 
 .stamp-card {
-    background-color: white;
+    background-color: transparent;
+    perspective: 1000px;
     border-radius: 8px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     overflow: hidden;
     width: 250px;
+    height: 380px;
     text-align: center;
 	animation: fadeIn 0.5s ease-in;
     opacity: 1;
     transform: scale(1);
     transition: transform 0.3s ease, box-shadow 0.3s ease;
+    cursor: pointer;
 }
 
 
@@ -163,7 +163,6 @@ select {
     width: 100%;  
     height: 200px;
     object-fit: contain;
-	background-color: white;
     border-radius: 8px;
 }
 
@@ -181,6 +180,98 @@ select {
 .stamp-details p {
 	color: #666;
 	margin-bottom: 0.5rem;
+}
+
+.stamp-card-inner {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    transition: transform 0.8s ease-in-out;
+    transform-style: preserve-3d;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+}
+
+.stamp-card.flipped .stamp-card-inner {
+    transform: rotateY(180deg);
+}
+
+.stamp-card-front, .stamp-card-back {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    -webkit-backface-visibility: hidden; /* Safari support */
+    backface-visibility: hidden;
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+}
+
+.stamp-card-front {
+    background-color: white;
+    color: #333;
+}
+
+.stamp-card-back {
+    background-color: #f9f9f9;
+    color: #333;
+    transform: rotateY(180deg);
+    align-items: center;
+}
+
+.stamp-actions {
+    display: flex;
+    flex-direction: column;
+    margin-top: 1rem;
+}
+
+.edit-btn, .delete-btn {
+    width: 120px;
+    padding: 10px;
+    margin: 0.8rem;
+    font-size: 1rem;
+}
+
+.edit-btn {
+    background-color: #007bff;
+}
+
+.delete-btn {
+    background-color: #dc3545;
+}
+
+/* Modal Styles */
+.edit-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.modal-content {
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    width: 90%;
+    max-width: 500px;
+    position: relative;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    animation: fadeIn 0.4s ease-in-out;
+}
+
+.close-modal {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    font-size: 24px;
+    cursor: pointer;
+    color: #333;
 }
 
 /* Pagination */
@@ -307,7 +398,8 @@ footer {
 	.collection-grid {
 		grid-template-columns: 1fr;
 	}
-	
+
+
 	.sort-controls {
         display: flex;
         flex-wrap: wrap; 
