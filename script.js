@@ -5,6 +5,18 @@ let currentCategory = 'all';
 let searchTerm = "";
 let collection = [];
 
+// Get stamps from Express API
+async function getStamps() {
+    try {
+        const response = await fetch("http://localhost:3000/stamps");
+        if (!response.ok) throw new Error("Failed to fetch stamps");
+        collection = await response.json();
+        console.log("Fetched stamps:", collection); // Debugging log
+        displayCollection();
+    } catch (error) {
+        console.error("Error fetching stamps:", error);
+    }
+}
 
 // Update page title to include current page number
 function updatePageTitle() {
@@ -207,31 +219,38 @@ function resetSorting() {
 
 
 // Add new stamp
-function addStamp(event) {
-	event.preventDefault();
-	
-	const form = event.target;
-	const stamps = getStamps();
-	const newStamp = {
-		id: stamps.length + 1,
-		name: form.name.value,
-		year: parseInt(form.year.value),
-		category: form.category.value,
-		condition: form.condition.value,
-		image: "images/dummy.jpg"
-	};
-	
-	stamps.push(newStamp);
-	saveStamps(stamps);
-	collection = currentCategory === 'all' 
-	? getStamps()
-	: getStamps().filter(stamp => stamp.category === currentCategory);
-	
-	form.reset();
-	alert('New stamp added successfully!');
-	window.location.href = 'collection.html';
-}
+async function addStamp(event) {
+    event.preventDefault();
 
+    const form = event.target;
+    const newStamp = {
+        name: form.name.value,
+        year: parseInt(form.year.value),
+        category: form.category.value,
+        condition: form.condition.value,
+        image: "images/dummy.jpg"
+    };
+
+    try {
+        const response = await fetch("http://localhost:3000/stamps", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(newStamp)
+        });
+
+        if (!response.ok) throw new Error("Failed to add stamp");
+
+        const createdStamp = await response.json();
+        console.log("Stamp added:", createdStamp); // Debugging log
+
+        await getStamps(); // Refresh collection from API
+        form.reset();
+        alert("New stamp added successfully!");
+        window.location.href = "collection.html"; // Redirect to collection
+    } catch (error) {
+        console.error("Error adding stamp:", error);
+    }
+}
 
 // Event Listeners
 document.addEventListener("DOMContentLoaded", () => {
