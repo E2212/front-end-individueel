@@ -60,6 +60,46 @@ app.post("/stamps", (req, res) => {
     res.status(201).json(newStamp);
 });
 
+// Delete stamp
+app.delete("/stamps/:id", (req, res) => {
+    const stampId = parseInt(req.params.id);
+    const stampIndex = stamps.findIndex(s => s.id === stampId);
+
+    if (stampIndex === -1) {
+        return res.status(404).json({ message: "Stamp not found" });
+    }
+
+    const deletedStamp = stamps.splice(stampIndex, 1)[0];
+    res.json(deletedStamp);
+});
+
+// Update stamp
+app.put("/stamps/:id", (req, res) => {
+    const stampId = parseInt(req.params.id);
+    const { name, year, category, condition, image } = req.body;
+
+    if (!name || !year || !category || !condition) {
+        return res.status(400).json({ message: "All fields are required" });
+    }
+
+    const stampIndex = stamps.findIndex(s => s.id === stampId);
+    if (stampIndex === -1) {
+        return res.status(404).json({ message: "Stamp not found" });
+    }
+
+    const updatedStamp = {
+        id: stampId,
+        name,
+        year,
+        category,
+        condition,
+        image: image || stamps[stampIndex].image // Code upgradability with possibility to add new picture in future
+    };
+
+    stamps[stampIndex] = updatedStamp;
+    res.json(updatedStamp);
+});
+
 // Start server
 app.listen(PORT, () => {
     console.log(`Server is running on http://localhost:${PORT}`);
