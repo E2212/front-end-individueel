@@ -62,25 +62,26 @@ function sortCollection(field) {
 
 
 // Filter by category
-function filterByCategory(category) {
-    const searchTerm = document.getElementById('search-input').value.toLowerCase(); // Get search term
-	
+async function filterByCategory(category) {
+    searchTerm = document.getElementById('search-input').value.toLowerCase(); // Get search term
+
     // Get stamps and apply category filter
-    let filteredCollection = getStamps().filter(stamp => 
-        category === "all" || stamp.category === category
-	);
-	
-    // If a search term is entered, apply it on top of category filtering
-    if (searchTerm) {
-        filteredCollection = filteredCollection.filter(stamp => 
-            stamp.name.toLowerCase().includes(searchTerm)
-		);
-	}
-	
-    collection = filteredCollection; // Update global collection
-    console.log("Filtered Collection after Category Change:", collection);
-	
-    displayCollection(); // Update UI
+    try {
+        const stamps = await getStamps();
+        const filteredCollection = stamps
+            .filter(stamp => category === "all" || stamp.category === category)
+            .filter(stamp => !searchTerm || stamp.name.toLowerCase().includes(searchTerm));
+
+        collection = filteredCollection; // Update global collection
+        console.log("Filtered Collection after Category Change:", collection);
+
+        sortCollection(currentSort.field)
+
+        displayCollection(); // Update UI
+
+            } catch (error) {
+        console.error("Error filtering by category:", error);
+    }
 }
 
 
@@ -126,27 +127,27 @@ function displayCollection() {
     updatePageTitle();
 }
 
-let searchTerm = "";
-
-function searchCollection() {
+async function searchCollection() {
     searchTerm = document.getElementById('search-input').value.toLowerCase();
     const selectedCategory = document.getElementById('category-filter').value;
-	
-    // Filter by name first
-    let filteredCollection = getStamps().filter(stamp => 
-        stamp.name.toLowerCase().includes(searchTerm)
-	);
-	
-    // If a category is selected, filter further
-    if (selectedCategory !== "all") {
-        filteredCollection = filteredCollection.filter(stamp => 
-            stamp.category === selectedCategory
-		);
-	}
-	
-    collection = filteredCollection;
-    currentPage = 1; 
-    displayCollection(); 
+
+    try {
+        const stamps = await getStamps();
+        const filteredCollection = stamps
+            .filter(stamp => selectedCategory === "all" || stamp.category === selectedCategory)
+            .filter(stamp => !searchTerm || stamp.name.toLowerCase().includes(searchTerm));
+
+        collection = filteredCollection;
+        console.log("Filtered Collection after Search:", collection);
+
+        sortCollection(currentSort.field)
+
+        currentPage = 1;
+        displayCollection();
+
+    } catch (error) {
+        console.error("Error filtering by search term:", error);
+    }
 }
 
 
