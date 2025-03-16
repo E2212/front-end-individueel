@@ -1,6 +1,6 @@
 let itemsPerPage = localStorage.getItem('itemsPerPage') ? parseInt(localStorage.getItem('itemsPerPage')) : 6;
 let currentPage = localStorage.getItem('currentPage') ? parseInt(localStorage.getItem('currentPage')) : 1;
-let currentSort = { field: 'name', ascending: true };
+let currentSort = { field: null, ascending: true };
 let currentCategory = 'all';
 let searchTerm = "";
 let collection = [];
@@ -10,11 +10,17 @@ async function getStamps() {
     try {
         const response = await fetch("http://localhost:3000/stamps");
         if (!response.ok) throw new Error("Failed to fetch stamps");
-        collection = await response.json();
-        console.log("Fetched stamps:", collection); // Debugging log
-        displayCollection();
+
+        const stamps = await response.json();
+        console.log("Fetched stamps", stamps) // Debugging log
+
+        collection = stamps;
+
+        return stamps;
+
     } catch (error) {
         console.error("Error fetching stamps:", error);
+        return [];
     }
 }
 
@@ -68,6 +74,8 @@ async function filterByCategory(category) {
     // Get stamps and apply category filter
     try {
         const stamps = await getStamps();
+        if (!stamps.length) return;
+
         const filteredCollection = stamps
             .filter(stamp => category === "all" || stamp.category === category)
             .filter(stamp => !searchTerm || stamp.name.toLowerCase().includes(searchTerm));
@@ -133,6 +141,8 @@ async function searchCollection() {
 
     try {
         const stamps = await getStamps();
+        if (!stamps.length) return;
+
         const filteredCollection = stamps
             .filter(stamp => selectedCategory === "all" || stamp.category === selectedCategory)
             .filter(stamp => !searchTerm || stamp.name.toLowerCase().includes(searchTerm));
@@ -142,7 +152,6 @@ async function searchCollection() {
 
         sortCollection(currentSort.field)
 
-        currentPage = 1;
         displayCollection();
 
     } catch (error) {
@@ -209,9 +218,17 @@ function updateSortButtons() {
 	});
 }
 
-function resetSorting() {
+async function resetFilters() {
     currentSort = { field: null, ascending: true }; // Reset sorting state
-    collection = getStamps(); // Restore original collection from data.js
+    currentCategory = "all";
+    searchTerm = "";
+
+    document.getElementById('category-filter').value = "all";
+    document.getElementById('search-input').value = "";
+
+    collection = await getStamps(); // Restore original collection from data.js
+
+    currentPage = 1;
     displayCollection(); // Update UI
 	
     // Reset sorting button text
@@ -254,8 +271,8 @@ async function addStamp(event) {
 }
 
 // Event Listeners
-document.addEventListener("DOMContentLoaded", () => {
-    collection = getStamps();
+document.addEventListener("DOMContentLoaded", async () => {
+     await getStamps();
     
     const itemsPerPageDropdown = document.getElementById("items-per-page");
     if (itemsPerPageDropdown) {
@@ -266,7 +283,7 @@ document.addEventListener("DOMContentLoaded", () => {
 	
 	// Initialize sort buttons
 	document.querySelectorAll('.sort-btn')?.forEach(btn => {
-		btn.addEventListener('click', () => sortCollection(btn.dataset.field));
+		btn.addEventListener('click', () => sortCollection(btn.dataset.field, currentSort.ascending));
 	});
 	
 	displayCollection();
@@ -292,5 +309,5 @@ document.addEventListener("DOMContentLoaded", () => {
 	// Add stamp form
 	document.getElementById('add-stamp-form')?.addEventListener('submit', addStamp);
 	
-	document.getElementById('reset-sort-btn')?.addEventListener('click', resetSorting);
+	document.getElementById('reset-sort-btn')?.addEventListener('click', resetFilters);
 });
